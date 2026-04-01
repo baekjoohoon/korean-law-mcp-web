@@ -3,20 +3,25 @@ const CORS={'Access-Control-Allow-Origin':'*','Access-Control-Allow-Methods':'PO
 
 async function searchLaw(query:string,oc:string){
   try{
-    const url=`http://www.law.go.kr/DRF/lawSearch.do?OC=${oc}&target=eflaw&type=JSON&query=${encodeURIComponent(query)}&display=10`
-    const r=await fetch(url,{headers:{'Accept':'application/json'}})
-    if(!r.ok){console.error('Law API error:',r.status);return null}
-    return await r.json()
-  }catch(e){console.error('Law API error:',e);return null}
-}
-
-async function getLawDetail(lawId:string,oc:string){
-  try{
-    const url=`http://www.law.go.kr/DRF/lawSearch.do?OC=${oc}&target=eflaw&type=JSON&LID=${lawId}`
-    const r=await fetch(url,{headers:{'Accept':'application/json'}})
-    if(!r.ok)return null
-    return await r.json()
-  }catch(e){console.error('Law detail error:',e);return null}
+    // HTTPS 버전 시도
+    const url=`https://www.law.go.kr/DRF/lawSearch.do?OC=${oc}&target=eflaw&type=JSON&query=${encodeURIComponent(query)}&display=10`
+    const r=await fetch(url,{
+      method:'GET',
+      headers:{
+        'Accept':'application/json',
+        'Content-Type':'application/json'
+      }
+    })
+    if(!r.ok){
+      console.error('Law API error:',r.status,r.statusText)
+      return null
+    }
+    const data=await r.json()
+    return data
+  }catch(e){
+    console.error('Law API error:',e)
+    return null
+  }
 }
 
 export async function onRequest(ctx:EventContext<Env>):Promise<Response>{
@@ -33,15 +38,17 @@ export async function onRequest(ctx:EventContext<Env>):Promise<Response>{
     
     if(result?.law&&Array.isArray(result.law)&&result.law.length>0){
       for(const law of result.law.slice(0,5)){
-        const title=law.법령명한글||'알수없는법령'
-        const id=law.법령ID||''
+        const title=law.법령명한글||law.법령Nm||'알수없는법령'
+        const id=law.법령ID||law.lawId||''
         const date=law.시행일자||law.efYd||''
-        const link=law.법령상세링크||law.lawDetailLink||''
-        const content=`**${title}**\n${date?`시행일: ${date}\n`:''}${id?`법령 ID: ${id}\n`:''}${link?`[자세히보기](${link})`:''}`
+        const link=law.법령상세링크||`https://www.law.go.kr/LSW/LsEfInfoMain.do?LS_ID=${id}`
+        const content=`**${title}**\n${date?`시행일: ${date}\n`:''}${id?`법령 ID: ${id}\n`:''}[자세히보기](${link})`
         ans+=content+'\n\n'
         srcs.push({type:'law',title,preview:content.substring(0,150)+'...'})
       }
       ans+=`\n**총 ${result.law.length}개 법령 찾음**\n\n출처: 법제처 국가법령정보센터 (www.law.go.kr)`
+    }else if(result?.error){
+      ans=`법제처 API 오류: ${result.error}\n\n잠시 후 다시 시도해주세요.`
     }else{
       ans=`"${query}"에 대한 검색 결과가 없습니다.\n\n다른 검색어로 시도해보세요.\n\n출처: 법제처 국가법령정보센터 (www.law.go.kr)`
     }
