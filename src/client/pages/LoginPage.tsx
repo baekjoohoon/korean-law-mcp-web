@@ -19,10 +19,10 @@ export default function LoginPage() {
         if (data.success) {
           // Direct localStorage manipulation
           localStorage.setItem('auth_token', data.token)
-          
+
           // Force reload to ensure App.tsx picks up the token
           window.location.href = '/'
-          
+
           return { success: true }
         } else {
           return {
@@ -39,13 +39,6 @@ export default function LoginPage() {
       }
     },
     [navigate],
-  )
-
-  return <Login onLoginSubmit={handleLoginSubmit} />
-}
-      return result
-    },
-    [login, navigate],
   )
 
   return <Login onLoginSubmit={handleLoginSubmit} />
