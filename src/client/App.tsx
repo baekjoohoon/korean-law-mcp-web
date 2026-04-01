@@ -4,7 +4,7 @@ import SearchPage from './pages/SearchPage'
 import { useAuth } from './hooks/useAuth'
 
 function App() {
-  const { isAuthenticated, isLoading, checkAuth } = useAuth()
+  const { isAuthenticated, isLoading } = useAuth()
 
   // Show loading state while checking auth
   if (isLoading) {
