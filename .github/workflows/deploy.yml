@@ -115,7 +115,7 @@ jobs:
           curl --fail https://korean-law-mcp-web.pages.dev || exit 1
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ github.run_number }}
           name: Release v${{ github.run_number }}
