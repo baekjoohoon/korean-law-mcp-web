@@ -4,7 +4,7 @@ import SearchPage from './pages/SearchPage'
 import { useAuth } from './hooks/useAuth'
 
 function App() {
-  const { isAuthenticated, isLoading } = useAuth()
+  const { isAuthenticated, isLoading, checkAuth } = useAuth()
 
   // Show loading state while checking auth
   if (isLoading) {
@@ -18,16 +18,15 @@ function App() {
     )
   }
 
+  // Force re-check auth on every render
+  const isAuth =
+    isAuthenticated ||
+    (typeof window !== 'undefined' && localStorage.getItem('auth_token') !== null)
+
   return (
     <Routes>
-      <Route
-        path="/login"
-        element={!isAuthenticated ? <LoginPage /> : <Navigate to="/" replace />}
-      />
-      <Route
-        path="/"
-        element={isAuthenticated ? <SearchPage /> : <Navigate to="/login" replace />}
-      />
+      <Route path="/login" element={!isAuth ? <LoginPage /> : <Navigate to="/" replace />} />
+      <Route path="/" element={isAuth ? <SearchPage /> : <Navigate to="/login" replace />} />
     </Routes>
   )
 }
