@@ -3,6 +3,9 @@ pages_build_output_dir = "./dist"
 compatibility_date = "2026-03-31"
 compatibility_flags = ["nodejs_compat"]
 
+# Cloudflare Functions 디렉토리
+functions = "./functions"
+
 # 환경 변수
 [vars]
 DASHSCOPE_API_KEY = "sk-sp-6366c63dca024186add9fe216ab9f627"

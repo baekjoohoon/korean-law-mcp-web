@@ -3,18 +3,18 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 import { copyFileSync, mkdirSync, existsSync } from 'fs'
 
-// Plugin to copy Cloudflare Functions to dist
+// Plugin to copy Cloudflare Functions to root functions/ directory
 function copyFunctions() {
   return {
     name: 'copy-functions',
     closeBundle() {
       const srcFunctions = path.resolve(__dirname, 'src/functions')
-      const distFunctions = path.resolve(__dirname, 'dist/functions')
+      const rootFunctions = path.resolve(__dirname, 'functions')
 
       if (existsSync(srcFunctions)) {
-        // Create dist/functions directory
-        if (!existsSync(distFunctions)) {
-          mkdirSync(distFunctions, { recursive: true })
+        // Create functions directory at root
+        if (!existsSync(rootFunctions)) {
+          mkdirSync(rootFunctions, { recursive: true })
         }
 
         // Copy all function files recursively
@@ -35,8 +35,8 @@ function copyFunctions() {
           }
         }
 
-        copyRecursive(srcFunctions, distFunctions)
-        console.log('✅ Cloudflare Functions copied to dist/functions')
+        copyRecursive(srcFunctions, rootFunctions)
+        console.log('✅ Cloudflare Functions copied to functions/')
       }
     },
   }
