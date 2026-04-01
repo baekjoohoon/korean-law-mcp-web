@@ -11,6 +11,13 @@ export default function LoginPage() {
     async (password: string) => {
       const result = await login(password)
       if (result.success) {
+        // Force storage event to trigger re-render in App.tsx
+        window.localStorage.setItem('auth_token', window.localStorage.getItem('auth_token') || '')
+        window.dispatchEvent(new Event('storage'))
+
+        // Small delay to ensure localStorage is updated
+        await new Promise((resolve) => setTimeout(resolve, 50))
+
         // Explicit navigation after successful login
         navigate('/', { replace: true })
       }
