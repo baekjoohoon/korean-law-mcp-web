@@ -1,0 +1,11 @@
+name = "korean-law-mcp-web"
+pages_build_output_dir = "./dist"
+compatibility_date = "2026-03-31"
+compatibility_flags = ["nodejs_compat"]
+
+# 환경 변수
+[vars]
+DASHSCOPE_API_KEY = ""  # Set in Cloudflare Dashboard or .env
+MCP_ENDPOINT = "https://korean-law-mcp.fly.dev/mcp"
+LAW_OC = ""  # Set in Cloudflare Dashboard or .env
+LOGIN_PASSWORD = "0629"  # Can be overridden in production

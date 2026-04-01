@@ -1,0 +1,99 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Primary colors */
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+
+  /* Gray colors */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-900: #111827;
+
+  /* Red colors */
+  --color-red-50: #fef2f2;
+  --color-red-100: #fee2e2;
+  --color-red-200: #fecaca;
+  --color-red-700: #b91c1c;
+}
+
+@layer base {
+  html {
+    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  }
+
+  body {
+    background-color: var(--color-gray-50);
+    color: var(--color-gray-900);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    background-color: var(--color-primary-600);
+    color: white;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: background-color 150ms ease;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-primary-700);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .input-field {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-gray-300);
+    border-radius: 0.5rem;
+    outline: none;
+    transition: all 150ms ease;
+  }
+
+  .input-field:focus {
+    box-shadow: 0 0 0 2px var(--color-primary-500);
+    border-color: transparent;
+  }
+
+  .input-field:disabled {
+    background-color: var(--color-gray-100);
+    cursor: not-allowed;
+  }
+
+  .card {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 0.1),
+      0 2px 4px -2px rgb(0 0 0 / 0.1);
+    padding: 1.5rem;
+  }
+}
+
+/* Korean-specific typography */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
