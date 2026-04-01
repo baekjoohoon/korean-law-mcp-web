@@ -6,8 +6,14 @@ import { useAuth } from './hooks/useAuth'
 function App() {
   const { isAuthenticated, isLoading } = useAuth()
 
-  // Show loading state while checking auth
-  if (isLoading) {
+  // Check localStorage immediately (synchronous)
+  const hasToken = typeof window !== 'undefined' && localStorage.getItem('auth_token') !== null
+
+  // Use localStorage check as primary, isAuthenticated as secondary
+  const isAuth = hasToken || isAuthenticated
+
+  // Show loading state only if no token exists
+  if (isLoading && !hasToken) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -17,11 +23,6 @@ function App() {
       </div>
     )
   }
-
-  // Force re-check auth on every render
-  const isAuth =
-    isAuthenticated ||
-    (typeof window !== 'undefined' && localStorage.getItem('auth_token') !== null)
 
   return (
     <Routes>
