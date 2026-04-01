@@ -37,8 +37,8 @@ export default function SearchPage() {
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
           <div>
-            <h1 className="text-xl font-bold text-gray-900">법률 검색 - 서우넷</h1>
-            <p className="text-xs text-gray-500 mt-1">AI 기반 대한민국 법령 검색</p>
+            <h1 className="text-xl font-bold text-gray-900">법률 검색 - 선우넷</h1>
+            <p className="text-xs text-gray-500 mt-1">AI 기반 대한민국 법령 검색 시스템</p>
           </div>
           <button
             onClick={logout}
@@ -89,9 +89,7 @@ export default function SearchPage() {
         {!result && !isLoading && !error && (
           <div className="card text-center py-12">
             <span className="text-4xl mb-4 block">⚖️</span>
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
-              법률 검색을 시작하세요
-            </h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-2">법률 검색을 시작하세요</h2>
             <p className="text-gray-600">
               검색어를 입력하면 AI 가 법령, 판례, 해석례를 찾아드립니다
             </p>

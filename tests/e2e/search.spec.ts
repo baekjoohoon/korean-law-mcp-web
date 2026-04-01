@@ -54,20 +54,18 @@ test.describe('법률 검색 기능', () => {
   })
 
   test('검색 페이지에 접근할 수 있다', async ({ page }) => {
-    await expect(page.locator('h1')).toContainText('법률 검색 - 서우넷')
+    await expect(page.locator('h1')).toContainText('법률 검색 - 선우넷')
     await expect(page.locator('[data-testid="search-input"]')).toBeVisible()
   })
 
   test('검색어를 입력할 수 있다', async ({ page }) => {
     await page.fill('[data-testid="search-input"]', '관세법')
-    await expect(page.locator('[data-testid="search-input"]'))
-      .toHaveValue('관세법')
+    await expect(page.locator('[data-testid="search-input"]')).toHaveValue('관세법')
   })
 
   test('검색 버튼이 비활성화된다 (빈 입력)', async ({ page }) => {
     await page.fill('[data-testid="search-input"]', '')
-    await expect(page.locator('[data-testid="search-button"]'))
-      .toBeDisabled()
+    await expect(page.locator('[data-testid="search-button"]')).toBeDisabled()
   })
 
   test('최근 검색어가 로컬 스토리지에 저장된다', async ({ page }) => {
@@ -78,9 +76,7 @@ test.describe('법률 검색 기능', () => {
     await page.waitForTimeout(500)
 
     // 로컬 스토리지 확인
-    const recentSearches = await page.evaluate(() =>
-      localStorage.getItem('recent_searches')
-    )
+    const recentSearches = await page.evaluate(() => localStorage.getItem('recent_searches'))
     expect(recentSearches).toBeTruthy()
     const searches = JSON.parse(recentSearches || '[]')
     expect(searches).toContain('관세법')
@@ -100,9 +96,7 @@ test.describe('법률 검색 기능', () => {
     await page.click('[data-testid="clear-history-button"]')
 
     // 로컬 스토리지 확인
-    const recentSearches = await page.evaluate(() =>
-      localStorage.getItem('recent_searches')
-    )
+    const recentSearches = await page.evaluate(() => localStorage.getItem('recent_searches'))
     expect(recentSearches).toBeNull()
   })
 

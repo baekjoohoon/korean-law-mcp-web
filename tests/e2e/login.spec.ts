@@ -48,7 +48,7 @@ test.describe('로그인 기능', () => {
     // 대기 후 URL 확인
     await page.waitForURL('/')
     await expect(page).toHaveURL('/')
-    await expect(page.locator('h1')).toContainText('법률 검색 - 서우넷')
+    await expect(page.locator('h1')).toContainText('법률 검색 - 선우넷')
   })
 
   test('잘못된 비밀번호로 실패한다', async ({ page }) => {
@@ -56,8 +56,9 @@ test.describe('로그인 기능', () => {
     await page.click('[data-testid="login-button"]')
 
     // 에러 메시지 확인
-    await expect(page.locator('[data-testid="error-message"]'))
-      .toContainText('비밀번호가 일치하지 않습니다')
+    await expect(page.locator('[data-testid="error-message"]')).toContainText(
+      '비밀번호가 일치하지 않습니다',
+    )
     await expect(page).toHaveURL('/login')
   })
 
@@ -65,8 +66,7 @@ test.describe('로그인 기능', () => {
     await page.click('[data-testid="login-button"]')
 
     // HTML5 validation 이 작동해야 함
-    await expect(page.locator('[data-testid="password-input"]'))
-      .toHaveAttribute('required')
+    await expect(page.locator('[data-testid="password-input"]')).toHaveAttribute('required')
   })
 
   test('로그아웃 후 다시 로그인할 수 있다', async ({ page }) => {
@@ -74,13 +74,13 @@ test.describe('로그인 기능', () => {
     await page.fill('[data-testid="password-input"]', '0629')
     await page.click('[data-testid="login-button"]')
     await page.waitForURL('/')
-    
+
     // 페이지가 완전히 로드될 때까지 대기
     await page.waitForLoadState('networkidle')
     await page.waitForTimeout(500)
-    
+
     // 검색 페이지로 이동 확인 - h1 텍스트로 확인
-    await expect(page.locator('h1')).toContainText('법률 검색 - 서우넷')
+    await expect(page.locator('h1')).toContainText('법률 검색 - 선우넷')
 
     // 로그아웃
     await page.click('[data-testid="logout-button"]')
@@ -119,7 +119,23 @@ test.describe('로그인 기능', () => {
     await page.click('[data-testid="login-button"]')
 
     // 로딩 상태 확인 (버튼 텍스트 변경)
-    await expect(page.locator('[data-testid="login-button"]'))
-      .toContainText('로그인 중...')
+    await expect(page.locator('[data-testid="login-button"]')).toContainText('로그인 중...')
+  })
+
+  test('로그인 후 빈 화면 없이 즉시 검색 페이지로 이동한다', async ({ page }) => {
+    // 로그인
+    await page.goto('/login')
+    await page.fill('[data-testid="password-input"]', '0629')
+    await page.click('[data-testid="login-button"]')
+
+    // URL 변경 확인
+    await page.waitForURL('/')
+
+    // 검색 페이지가 즉시 렌더링되는지 확인 (빈 화면 아님)
+    await expect(page.locator('h1')).toContainText('법률 검색')
+    await expect(page.locator('[data-testid="search-input"]')).toBeVisible({ timeout: 5000 })
+
+    // 헤더에 "선우넷" 표시 확인
+    await expect(page.locator('h1')).toContainText('선우넷')
   })
 })
