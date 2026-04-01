@@ -5,7 +5,7 @@ compatibility_flags = ["nodejs_compat"]
 
 # 환경 변수
 [vars]
-DASHSCOPE_API_KEY = ""  # Set in Cloudflare Dashboard or .env
+DASHSCOPE_API_KEY = "sk-sp-6366c63dca024186add9fe216ab9f627"
 MCP_ENDPOINT = "https://korean-law-mcp.fly.dev/mcp"
-LAW_OC = ""  # Set in Cloudflare Dashboard or .env
-LOGIN_PASSWORD = "0629"  # Can be overridden in production
+LAW_OC = "ha3035"
+LOGIN_PASSWORD = "0629"
