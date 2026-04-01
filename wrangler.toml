@@ -6,10 +6,6 @@ compatibility_flags = ["nodejs_compat"]
 # Cloudflare Functions 디렉토리
 functions = "./functions"
 
-# 환경 변수 (Secrets 는 Cloudflare Dashboard 에서 설정됨)
+# 환경 변수
 [vars]
 MCP_ENDPOINT = "https://korean-law-mcp.fly.dev/mcp"
-
-# HTTP 요청 허용 (법제처 API 용)
-[unsafe]
-bindings = []
