@@ -1,26 +1,48 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Login from '../components/Login'
-import { useAuth } from '../hooks/useAuth'
 
 export default function LoginPage() {
-  const { login } = useAuth()
   const navigate = useNavigate()
 
   const handleLoginSubmit = useCallback(
     async (password: string) => {
-      const result = await login(password)
-      if (result.success) {
-        // Force storage event to trigger re-render in App.tsx
-        window.localStorage.setItem('auth_token', window.localStorage.getItem('auth_token') || '')
-        window.dispatchEvent(new Event('storage'))
+      try {
+        const response = await fetch('/api/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password }),
+        })
 
-        // Small delay to ensure localStorage is updated
-        await new Promise((resolve) => setTimeout(resolve, 50))
+        const data = await response.json()
 
-        // Explicit navigation after successful login
-        navigate('/', { replace: true })
+        if (data.success) {
+          // Direct localStorage manipulation
+          localStorage.setItem('auth_token', data.token)
+          
+          // Force reload to ensure App.tsx picks up the token
+          window.location.href = '/'
+          
+          return { success: true }
+        } else {
+          return {
+            success: false,
+            message: data.message || '로그인에 실패했습니다',
+          }
+        }
+      } catch (error) {
+        console.error('Login error:', error)
+        return {
+          success: false,
+          message: '네트워크 오류가 발생했습니다',
+        }
       }
+    },
+    [navigate],
+  )
+
+  return <Login onLoginSubmit={handleLoginSubmit} />
+}
       return result
     },
     [login, navigate],
