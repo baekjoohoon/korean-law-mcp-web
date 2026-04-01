@@ -1,11 +1,59 @@
 /**
  * 인증 API 엔드포인트
- * Wave 5에서 MCP + Qwen 통합으로 확장될 예정
  */
+export interface Env {
+  DASHSCOPE_API_KEY: string
+  MCP_ENDPOINT: string
+  LAW_OC: string
+  LOGIN_PASSWORD: string
+}
 
-import { onRequest as authHandler } from '../../server/api/auth'
-import { Env } from '../../server/utils/handler'
+const VALID_PASSWORD = '0629'
 
 export async function onRequest(context: EventContext<Env, string, unknown>): Promise<Response> {
-  return authHandler(context)
+  if (context.request.method !== 'POST') {
+    return Response.json(
+      { success: false, message: '허용되지 않은 메서드입니다' },
+      { status: 405 }
+    )
+  }
+
+  try {
+    const body = await context.request.json()
+    const { password } = body
+
+    if (!password) {
+      return Response.json(
+        { success: false, message: '비밀번호를 입력해주세요' },
+        { status: 400 }
+      )
+    }
+
+    if (password === VALID_PASSWORD) {
+      const tokenData = {
+        timestamp: Date.now(),
+        expiresAt: Date.now() + 24 * 60 * 60 * 1000,
+        userId: 'admin',
+      }
+      const token = btoa(JSON.stringify(tokenData))
+
+      return Response.json({
+        success: true,
+        token,
+        message: '로그인 성공',
+        expiresAt: new Date(tokenData.expiresAt).toISOString(),
+      })
+    } else {
+      return Response.json(
+        { success: false, message: '비밀번호가 일치하지 않습니다' },
+        { status: 401 }
+      )
+    }
+  } catch (error) {
+    console.error('Auth error:', error)
+    return Response.json(
+      { success: false, message: '잘못된 요청입니다' },
+      { status: 400 }
+    )
+  }
 }

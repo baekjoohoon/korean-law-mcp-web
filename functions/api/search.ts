@@ -1,11 +1,23 @@
 /**
- * 검색 API 엔드포인트
- * Wave 5에서 MCP + Qwen 통합으로 확장될 예정
+ * 검색 API 엔드포인트 (구현 중)
  */
-
-import { onRequest as searchHandler } from '../../server/api/search'
-import { Env } from '../../server/utils/handler'
+export interface Env {
+  DASHSCOPE_API_KEY: string
+  MCP_ENDPOINT: string
+  LAW_OC: string
+}
 
 export async function onRequest(context: EventContext<Env, string, unknown>): Promise<Response> {
-  return searchHandler(context)
+  if (context.request.method !== 'POST') {
+    return Response.json({ success: false, message: '허용되지 않은 메서드입니다' }, { status: 405 })
+  }
+
+  // TODO: Implement MCP + Qwen integration
+  return Response.json({
+    success: true,
+    answer: '검색 기능이 준비 중입니다',
+    sources: [],
+    query: 'test',
+    timestamp: new Date().toISOString(),
+  })
 }
